@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create Orders table
+      author: Mehriban Jabbar
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_number
+                  type: varchar(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_details
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: varchar(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
