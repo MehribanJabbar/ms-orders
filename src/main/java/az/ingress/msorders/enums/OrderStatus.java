@@ -1,7 +1,7 @@
 package az.ingress.msorders.enums;
 
 public enum OrderStatus {
+    WAITING,
     PREPARING,
-    COMPLETED,
-    CANCELLED
+    DONE
 }

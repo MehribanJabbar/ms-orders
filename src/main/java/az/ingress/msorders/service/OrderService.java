@@ -5,11 +5,10 @@ import az.ingress.msorders.dao.entity.OrderEntity;
 import az.ingress.msorders.client.TicketClient;
 import az.ingress.msorders.dao.repository.OrderRepository;
 import az.ingress.msorders.dto.request.SaveOrderRequest;
-import az.ingress.msorders.dto.request.UpdateOrderRequest;
 import az.ingress.msorders.dto.response.OrderResponse;
 import az.ingress.msorders.enums.OrderStatus;
 import az.ingress.msorders.exception.NotFoundException;
-import az.ingress.msorders.mapper.OrderMapper;
+import az.ingress.msorders.queue.QueueListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,7 @@ import static az.ingress.msorders.mapper.OrderMapper.*;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final TicketClient ticketClient;
+    private final QueueListener queueListener;
 
     public OrderResponse findOrderById(Long id) {
         var order = orderRepository.findById(id)
@@ -45,16 +45,16 @@ public class OrderService {
     @Transactional
     public void saveOrder(SaveOrderRequest request) {
         OrderEntity order = buildToEntity(request);
-        order.setStatus(OrderStatus.PREPARING);
+        order.setStatus(OrderStatus.WAITING);
         order.setOrderNumber(UUID.randomUUID().toString());
         orderRepository.save(order);
         ticketClient.saveTicket(createTicketRequestFromOrder(order));
     }
 
-    public void changeStatus(Long id, OrderStatus newStatus){
+    public void changeStatus(Long id){
         var order = orderRepository.findById(id)
                 .orElseThrow(()->new NotFoundException("ORDER_NOT_FOUND"));
-        order.setStatus(newStatus);
+        order.setStatus(OrderStatus.DONE);
         orderRepository.save(order);
     }
 

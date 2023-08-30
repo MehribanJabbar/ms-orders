@@ -39,7 +39,7 @@ public class OrderController {
 
     @PutMapping("/{id}/status")
     @ResponseStatus(OK)
-    public void changeStatus(@PathVariable Long id, @RequestBody OrderStatus status) {
-        orderService.changeStatus(id, status);
+    public void changeStatus(@PathVariable Long id) {
+        orderService.changeStatus(id);
     }
 }
